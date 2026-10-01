@@ -1,9 +1,3 @@
-/*
- * suppliers.c  -  Supplier Management module (Week 7: strings)
- *
- * Every supplier has: ID, name, email, telephone and town, stored in
- * parallel arrays.  Supplier IDs are generated automatically.
- */
 #include <stdio.h>
 #include <string.h>
 #include "config.h"
@@ -37,7 +31,6 @@ int getSupplierCount(void)
     return supCount;
 }
 
-/* Index of a supplier with exactly this name (any letter case), or -1. */
 static int findSupplierByName(const char name[])
 {
     int i;
@@ -50,9 +43,6 @@ static int findSupplierByName(const char name[])
     return -1;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Display helpers                                                    */
-/* ------------------------------------------------------------------ */
 
 static void printSupplierHeader(FILE *out)
 {
@@ -81,9 +71,6 @@ void printSupplierTable(FILE *out)
     }
 }
 
-/* ------------------------------------------------------------------ */
-/*  User-facing operations                                             */
-/* ------------------------------------------------------------------ */
 
 void addSupplier(void)
 {
@@ -98,7 +85,7 @@ void addSupplier(void)
         return;
     }
 
-    /* Supplier name: not empty and not already registered (strcmp). */
+   
     for (;;) {
         readText("Supplier name : ", name, NAME_LEN);
         if (findSupplierByName(name) != -1) {
@@ -107,7 +94,7 @@ void addSupplier(void)
             break;
         }
     }
-    /* Email: must look like name@domain.xx */
+
     for (;;) {
         readText("Email         : ", email, EMAIL_LEN);
         if (isValidEmail(email)) {
@@ -115,7 +102,7 @@ void addSupplier(void)
         }
         printf("  Invalid email. Example: sales@company.com.na\n");
     }
-    /* Telephone: at least 7 digits; digits, spaces, '-' and a leading '+' */
+   
     for (;;) {
         readText("Telephone     : ", phone, PHONE_LEN);
         if (isValidPhone(phone)) {
@@ -126,7 +113,7 @@ void addSupplier(void)
 
     n = supCount;
     supId[n] = nextSupplierId++;
-    strcpy(supName[n], name);           /* strcpy: copy validated text into the table */
+    strcpy(supName[n], name);          
     strcpy(supEmail[n], email);
     strcpy(supPhone[n], phone);
     readText("Town/Location : ", supTown[n], TOWN_LEN);
@@ -191,7 +178,7 @@ void searchSupplier(void)
     printf("\n%d supplier(s) found.\n", matches);
 }
 
-/* Compare two suppliers: alphabetical order, same town?, name lengths. */
+
 void compareSuppliers(void)
 {
     int idA;
@@ -220,7 +207,7 @@ void compareSuppliers(void)
         return;
     }
 
-    /* strcmp returns <0, 0 or >0 depending on alphabetical order (Week 7). */
+   
     toLowerCopy(lowerA, supName[a], NAME_LEN);
     toLowerCopy(lowerB, supName[b], NAME_LEN);
     order = strcmp(lowerA, lowerB);
@@ -273,9 +260,6 @@ void supplierMenu(void)
     } while (choice != 5);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Persistence (Week 10)                                              */
-/* ------------------------------------------------------------------ */
 
 int saveSuppliers(const char *path)
 {
@@ -319,7 +303,7 @@ int loadSuppliers(const char *path)
         if (len == 0) {
             continue;
         }
-        /* widths: NAME_LEN-1=49, EMAIL_LEN-1=59, PHONE_LEN-1=19, TOWN_LEN-1=29 */
+        
         if (sscanf(line, "%d|%49[^|]|%59[^|]|%19[^|]|%29[^|]",
                    &id, name, email, phone, town) == 5
             && id > 0 && findSupplierById(id) == -1 && supCount < MAX_SUPPLIERS) {
@@ -330,7 +314,7 @@ int loadSuppliers(const char *path)
             strcpy(supTown[supCount], town);
             supCount++;
             if (id >= nextSupplierId) {
-                nextSupplierId = id + 1;    /* keep future IDs unique */
+                nextSupplierId = id + 1;    
             }
         } else {
             skipped++;
