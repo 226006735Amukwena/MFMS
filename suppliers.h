@@ -1,6 +1,3 @@
-/*
- * suppliers.h  -  Public interface of the Supplier Management module
- */
 #ifndef SUPPLIERS_H
 #define SUPPLIERS_H
 
