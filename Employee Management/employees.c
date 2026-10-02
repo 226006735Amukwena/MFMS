@@ -249,3 +249,30 @@ void employeeMenu(void)
         }
     } while (choice != 5);
 }
+
+/* Stores one employee directly (used for sample data). */
+static void storeEmployee(int id, const char *name, const char *dept,
+                          const char *position, double basic, double housing,
+                          double transport, double other)
+{
+    int i = empCount;
+
+    empId[i] = id;
+    strcpy(empName[i], name);
+    strcpy(empDept[i], dept);
+    strcpy(empPosition[i], position);
+    empBasic[i] = basic;
+    empHousing[i] = housing;
+    empTransport[i] = transport;
+    empOther[i] = other;
+    empCount++;
+}
+
+void seedEmployees(void)
+{
+    storeEmployee(1001, "Anna Shikongo",    "Finance", "Accountant",   18000, 3000, 1500, 0);
+    storeEmployee(1002, "Petrus Nghidinwa", "Finance", "Clerk",         9500, 1500,  800, 0);
+    storeEmployee(1003, "Maria Amupolo",    "Health",  "Nurse",        14000, 2500, 1200, 500);
+    storeEmployee(1004, "Johannes Kavari",  "Roads",   "Engineer",     32000, 5000, 2500, 0);
+    storeEmployee(1005, "Selma Iipinge",    "Admin",   "Receptionist",  8500, 1200,  600, 0);
+}
