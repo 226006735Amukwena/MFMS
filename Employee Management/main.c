@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
+#include "employees.h"
 
 void displayMenu(void);
 
@@ -9,9 +10,8 @@ int main(int argc, char *argv[])
 {
     int choice;
 
-    /* Run ./mfms --demo to start with sample data. */
     if (argc > 1 && strcmp(argv[1], "--demo") == 0) {
-        int seedEmployees();
+        seedEmployees();
         printf("Demo data loaded.\n");
     }
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
         switch (choice) {
             case 1:
-                printf("Employee Management.\n");
+                employeeMenu();
                 break;
             case 2:
                 printf("Budget Management.\n");
