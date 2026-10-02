@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 
-void displayMenu(void);
-int readInt(const char *prompt, int min, int max);
-
-int main()
+int main(void)
 {
     int choice;
 
     do {
-        displayMenu();
+        void displayMenu(void);
         choice = readInt("Enter your choice: ", 1, 6);
 
         switch (choice) {
@@ -38,7 +36,7 @@ int main()
     return 0;
 }
 
-void displayMenu() {
+void displayMenu(void){
     printf("\n========================================\n");
         printf("MUNICIPAL FINANCIAL MANAGEMENT SYSTEM\n");
         printf("========================================\n");
@@ -48,24 +46,4 @@ void displayMenu() {
         printf("4. Asset Management\n");
         printf("5. Reports\n");
         printf("6. Exit\n");
-}
-
-int readInt(const char *prompt, int min, int max) {
-    int value, c;
-
-    for (;;) {
-        printf("%s", prompt);
-        if (scanf("%d", &value) != 1) {
-            if (feof(stdin)) {
-                exit(0);
-            }
-            printf("Invalid input. Please enter an integer.\n");
-        } else if (value < min || value > max) {
-            printf("Input out of range. Please enter a value between %d and %d.\n", min, max);
-        } else {
-            while ((c = getchar()) != '\n' && c != EOF) { }
-            return value;
-        }
-        while ((c = getchar()) != '\n' && c != EOF) { }
-    }
 }

@@ -12,11 +12,12 @@ extern char empPosition[MAX_EMPLOYEES][POSITION_LEN];
 extern double empBasic[MAX_EMPLOYEES];
 extern double empHousing[MAX_EMPLOYEES];
 extern double empTransport[MAX_EMPLOYEES];
+extern double empOther[MAX_EMPLOYEES];
 extern int empCount;
 
-void employeeMenu();
-void addEmployee();
-void displayEmployees();
+void employeeMenu(void);
+void addEmployee(void);
+void displayEmployees(void);
 
 void searchEmployee(void);
 void calculateSalary(void);

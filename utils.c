@@ -66,8 +66,8 @@ int readInt(const char *prompt, int min, int max)
         }
         value = strtol(buf, &end, 10);
         if (*end != '\0') {
-            printf("Invalid input. Please enter a valid whole number.\n", buf);
-        }else if (value < min || value > max) {
+            printf("Invalid input. Please enter a valid whole number.\n");
+        } else if (value < min || value > max) {
             printf("Input out of range. Please enter a number between %d and %d.\n", min, max);
         } else {
             return (int)value;
@@ -77,13 +77,13 @@ int readInt(const char *prompt, int min, int max)
 
 }
 
-double readDouble(const char *prompt, double min)
+double readDouble(const char *prompt, double min, double max)
 {
     char buf[64];
     char *end;
     double value;
 
-    for(;;) {
+    for (;;) {
         readLine(prompt, buf, sizeof(buf));
         trimString(buf);
         if (buf[0] == '\0') {
@@ -93,13 +93,13 @@ double readDouble(const char *prompt, double min)
         value = strtod(buf, &end);
         if (*end != '\0') {
             printf("Invalid input. Please enter a valid number.\n");
-        } else if (value < min) {
-            printf("Input out of range. Please enter a number greater than or equal to %.2f.\n", min);
+        } else if (value < min || value > max) {
+            printf("Input out of range. Please enter a number between %.2f and %.2f.\n", min, max);
         } else {
             return value;
         }
     }
-} 
+}
 
 static void lowerCopy(char *dst, const char *src, size_t size)
 
