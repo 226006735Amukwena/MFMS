@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Assets.H"
+#include "Assets.h"
 
 int assetID[MAX_ASSETS];
 char assetName[MAX_ASSETS][NAME_LEN];
