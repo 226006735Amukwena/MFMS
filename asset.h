@@ -1,4 +1,4 @@
-ifndef Assets_H
+#ifndef Assets_H
 #define Assets_H
 #define MAX_ASSETS 50
 #define NAME_LEN 50
