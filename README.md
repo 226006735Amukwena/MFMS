@@ -8,12 +8,6 @@ The Municipal Financial Management System (MFMS) is a menu-driven C application 
 
 The system is organised into separate modules for employee management, budget management, supplier management, asset management and reporting.
 
-### Programming Environment
-- Language: ANSI C (C99)
-- Development environment: Visual Studio Code
-- Compiler: GCC
-- Version control: Git and GitHub
-
 ### Main Features
 1. Employee Management
    - Add employees
