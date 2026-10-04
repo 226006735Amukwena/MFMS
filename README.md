@@ -48,7 +48,7 @@ The system is organised into separate modules for employee management, budget ma
 | 2 | 226065669 | Matias Joseph | Budget Management |
 | 3 | 226006735 | Eliaser Amukwena | Supplier Management |
 | 4 | 223023205 | Mukanwa Mataa | Asset Management |
-| 5 | __________ | __________________ | Management |
+| 5 | 226054179 | Jose Mutongolume| Report Management |
 | 6 | 226034917 | Esala Amunyela | Functions and Integration |
 | 7 | __________ | __________________ | Management |
 
