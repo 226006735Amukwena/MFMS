@@ -61,7 +61,7 @@ void assetDisplay(void)
         return;
 
     }
-    printf("%-8d %-20s %-15s %-15.2f %-20s %-15s\n",
+    printf("%-8s %-20s %-15s %-15s %-20s %-15s\n",
        "assetID",
        "assetName",
        "assetType",

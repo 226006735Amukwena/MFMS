@@ -4,13 +4,19 @@
 
 #define MAX_DEPT 20
 #define NAME_SIZE 50
+#ifndef NAME_LEN
+#define NAME_LEN 60
+#endif
+#ifndef DEPT_LEN
+#define DEPT_LEN 30
+#endif
 
 char names[MAX_DEPT][NAME_SIZE];
 float allocated[MAX_DEPT];
 float spent[MAX_DEPT];
 int count = 0;
 
-void clearBuffer()
+void clearBuffer(void)
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {

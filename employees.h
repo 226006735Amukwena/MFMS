@@ -28,4 +28,6 @@ double calculatePension(double basic);
 double calculateTax(double taxable);
 double calculateNet(double gross, double pension, double tax);
 
+void seedEmployees(void);
+
 #endif

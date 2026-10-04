@@ -4,6 +4,13 @@
 #define TYPE_LEN 50
 #define CONDITION_LEN 50
 
+#ifndef NAME_LEN
+#define NAME_LEN 60
+#endif
+#ifndef DEPT_LEN
+#define DEPT_LEN 30
+#endif
+
 extern int assetID[MAX_ASSETS];
 extern char assetName[MAX_ASSETS][NAME_LEN];
 extern char assetType[MAX_ASSETS][TYPE_LEN];

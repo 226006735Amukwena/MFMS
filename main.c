@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utils.h"
 #include "employees.h"
 #include "budget.h"
@@ -8,16 +9,17 @@
 #include "reports.h"
 
 void displayMenu(void);
-void employeeManagement(void);
-void budgetManagement(void);
-void supplierManagement(void);
-void assetManagement(void);
-void reportsManagement(void);
-void exitProgram(void);
+void reportsMenu(void);
+void assetMenu(void);
 
-int main(void)
+int main(int argc, char *argv[])
 {
     int choice;
+
+    if (argc > 1 && strcmp(argv[1], "--demo") == 0) {
+        seedEmployees();
+        printf("Demo data loaded.\n");
+    }
 
     do {
         displayMenu();
@@ -25,25 +27,26 @@ int main(void)
 
         switch (choice) {
             case 1:
-                employeeManagement();
+                employeeMenu();
                 break;
             case 2:
-                budgetManagement();
+                budgetMenu();
                 break;
             case 3:
-                supplierManagement();
+                supplierMenu();
                 break;
             case 4:
-                assetManagement();
+                assetMenu();
                 break;
             case 5:
-                reportsManagement();
+                reportsMenu();
                 break;
             case 6:
-                exitProgram();
+                printf("Goodbye!\n");
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
+                break;
         }
     } while (choice != 6);
 

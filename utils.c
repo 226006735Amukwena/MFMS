@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
+#include <stddef.h>
 
 void readLine(const char *prompt, char *buf, int size) 
   {
@@ -130,32 +131,4 @@ int containsIgnoreCase(const char *haystack, const char *needle)
     lowerCopy(lowerHaystack, haystack, sizeof(lowerHaystack));
     lowerCopy(lowerNeedle, needle, sizeof(lowerNeedle));
     return strstr(lowerHaystack, lowerNeedle) != NULL;
-}
-
-void printLine(FILE *out, char c, int n)
-{
-    int i;
-    for (i = 0; i < n; i++) {
-        fputc(c, out);
-    }
-    fputc('\n', out);
-}
-
-void printTitle(FILE *out, const char *title)
-{
-    fprintf(out, "\n");
-    printLine(out, '=', 60);
-    fprintf(out, "%s\n", title);
-    printLine(out, '=', 60);
-}
-
-void readText(const char *prompt, char *buf, int size)
-{
-    readNonEmpty(prompt, buf, size);
-}
-
-void pauseScreen(void)
-{
-    char buf[8];
-    readLine("\nPress Enter to continue...", buf, sizeof buf);
 }

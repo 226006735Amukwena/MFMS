@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "suppliers.h"
 
-#define FIRST_SUPPLIER_ID 1001          //the first supplier ID to be assigned//
+#define FIRST_SUPPLIER_ID 1001  
 
 static int  supId[MAX_SUPPLIERS];
 static char supName[MAX_SUPPLIERS][SUP_NAME_LEN];
@@ -13,6 +13,9 @@ static char supPhone[MAX_SUPPLIERS][SUP_PHONE_LEN];
 static char supTown[MAX_SUPPLIERS][SUP_TOWN_LEN];
 static int  supCount = 0;
 static int  nextSupplierId = FIRST_SUPPLIER_ID;
+
+int isValidEmail(const char *email);
+int isValidPhone(const char *phone);
 
 //arrays to store supplier data, and counters for the number of suppliers and the next ID to assign//
 int findSupplierById(int id)
