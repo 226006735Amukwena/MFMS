@@ -1,9 +1,7 @@
 #ifndef Assets_H
 #define Assets_H
 #define MAX_ASSETS 50
-#define NAME_LEN 50
 #define TYPE_LEN 50
-#define DEPT_LEN 50
 #define CONDITION_LEN 50
 
 extern int assetID[MAX_ASSETS];

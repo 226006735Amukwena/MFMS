@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 #include "config.h"
-#include "utilities.h"
+#include "utils.h"
 #include "suppliers.h"
 
 #define FIRST_SUPPLIER_ID 1001          //the first supplier ID to be assigned//
 
 static int  supId[MAX_SUPPLIERS];
-static char supName[MAX_SUPPLIERS][NAME_LEN];
-static char supEmail[MAX_SUPPLIERS][EMAIL_LEN];
-static char supPhone[MAX_SUPPLIERS][PHONE_LEN];
-static char supTown[MAX_SUPPLIERS][TOWN_LEN];
+static char supName[MAX_SUPPLIERS][SUP_NAME_LEN];
+static char supEmail[MAX_SUPPLIERS][SUP_EMAIL_LEN];
+static char supPhone[MAX_SUPPLIERS][SUP_PHONE_LEN];
+static char supTown[MAX_SUPPLIERS][SUP_TOWN_LEN];
 static int  supCount = 0;
 static int  nextSupplierId = FIRST_SUPPLIER_ID;
 
@@ -73,9 +73,9 @@ void printSupplierTable(FILE *out)
 //adds a new supplier by prompting the user for input and storing the data in the arrays//
 void addSupplier(void)
 {
-    char name[NAME_LEN];
-    char email[EMAIL_LEN];
-    char phone[PHONE_LEN];
+    char name[SUP_NAME_LEN];
+    char email[SUP_EMAIL_LEN];
+    char phone[SUP_PHONE_LEN];
     int n;
 // displays the "ADD SUPPLIER" title and checks if the supplier table is full//
     printTitle(stdout, "ADD SUPPLIER");
@@ -86,7 +86,7 @@ void addSupplier(void)
 
    //prompts the user for supplier name, email, and phone number, validating each input//
     for (;;) {
-        readText("Supplier name : ", name, NAME_LEN);
+        readText("Supplier name : ", name, SUP_NAME_LEN);
         if (findSupplierByName(name) != -1) {
             printf("  A supplier with that name is already registered.\n");
         } else {
@@ -95,7 +95,7 @@ void addSupplier(void)
     }
     //
     for (;;) {
-        readText("Email         : ", email, EMAIL_LEN);
+        readText("Email         : ", email, SUP_EMAIL_LEN);
         if (isValidEmail(email)) {
             break;
         }
@@ -103,7 +103,7 @@ void addSupplier(void)
     }
    //prompts the user for a valid phone number, ensuring it meets the required format//
     for (;;) {
-        readText("Telephone     : ", phone, PHONE_LEN);
+        readText("Telephone     : ", phone, SUP_PHONE_LEN);
         if (isValidPhone(phone)) {
             break;
         }
@@ -115,7 +115,7 @@ void addSupplier(void)
     strcpy(supName[n], name);          
     strcpy(supEmail[n], email);
     strcpy(supPhone[n], phone);
-    readText("Town/Location : ", supTown[n], TOWN_LEN);
+    readText("Town/Location : ", supTown[n], SUP_TOWN_LEN);
     supCount++;
 
     printf("\nSupplier registered with ID %d.\n", supId[n]);
@@ -135,7 +135,7 @@ void searchSupplier(void)
     int index;
     int i;
     int matches = 0;
-    char text[NAME_LEN];
+    char text[SUP_NAME_LEN];
     //displays the search menu and prompts the user to choose a search type//
     printTitle(stdout, "SEARCH SUPPLIER");
     printf("1. Search by supplier ID\n");
@@ -155,9 +155,9 @@ void searchSupplier(void)
         return;
     }
     if (choice == 2) {
-        readText("Enter name to search: ", text, NAME_LEN);
+        readText("Enter name to search: ", text, SUP_NAME_LEN);
     } else {
-        readText("Enter town: ", text, TOWN_LEN);
+        readText("Enter town: ", text, SUP_TOWN_LEN);
     }
     for (i = 0; i < supCount; i++) {
         int hit;
@@ -184,8 +184,8 @@ void compareSuppliers(void)
     int a;
     int b;
     int order;
-    char lowerA[NAME_LEN];
-    char lowerB[NAME_LEN];
+    char lowerA[SUP_NAME_LEN];
+    char lowerB[SUP_NAME_LEN];
 // displays the "COMPARE TWO SUPPLIERS" title and checks if there are at least two suppliers to compare//
     printTitle(stdout, "COMPARE TWO SUPPLIERS");
     if (supCount < 2) {
@@ -206,8 +206,8 @@ void compareSuppliers(void)
     }
 
    //converts the supplier names to lowercase for case-insensitive comparison and determines their alphabetical order//
-    toLowerCopy(lowerA, supName[a], NAME_LEN);
-    toLowerCopy(lowerB, supName[b], NAME_LEN);
+    toLowerCopy(lowerA, supName[a], SUP_NAME_LEN);
+    toLowerCopy(lowerB, supName[b], SUP_NAME_LEN);
     order = strcmp(lowerA, lowerB);
     //displays the comparison results, including alphabetical order, town location, and name lengths//
     printf("\n  A: %s (%s)\n  B: %s (%s)\n\n", supName[a], supTown[a], supName[b], supTown[b]);
@@ -280,10 +280,10 @@ int loadSuppliers(const char *path)
 {
     FILE *fp = fopen(path, "r");
     char line[256];
-    char name[NAME_LEN];
-    char email[EMAIL_LEN];
-    char phone[PHONE_LEN];
-    char town[TOWN_LEN];
+    char name[SUP_NAME_LEN];
+    char email[SUP_EMAIL_LEN];
+    char phone[SUP_PHONE_LEN];
+    char town[SUP_TOWN_LEN];
     int id;
     int skipped = 0;
     size_t len;

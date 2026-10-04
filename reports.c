@@ -1,50 +1,67 @@
 #include <stdio.h>
 #include <string.h>
+#include "employees.h"
 #include "reports.h"
+#include "config.h"
+#include "utils.h"
+#include "suppliers.h"
+#include "asset.h"
+#include "budget.h"
 
-double calculateGross(Employee e)
+#ifndef MFMS_EMPLOYEE_DEFINED
+#define MFMS_EMPLOYEE_DEFINED
+struct Employee {
+    char name[100];
+    double basicSalary;
+    double housingAllowance;
+    double transportAllowance;
+};
+#endif
+
+#ifndef MFMS_BUDGET_DEFINED
+#define MFMS_BUDGET_DEFINED
+struct Budget {
+    char department[100];
+    double allocated;
+    double expenditure;
+};
+#endif
+
+#ifndef MFMS_SUPPLIER_DEFINED
+#define MFMS_SUPPLIER_DEFINED
+struct Supplier {
+    char id[50];
+    char name[100];
+    char email[100];
+    char phone[50];
+    char town[100];
+};
+#endif
+
+#ifndef MFMS_ASSET_DEFINED
+#define MFMS_ASSET_DEFINED
+struct Asset {
+    char id[50];
+    char name[100];
+    int type;
+    double value;
+    char department[100];
+    char condition[100];
+};
+#endif
+
+double calculateGross(const struct Employee e)
 {
     return e.basicSalary + e.housingAllowance + e.transportAllowance;
 }
 
-void employeeReport(const Employee employees[], int count)
+void employeeReport(void)
 {
-    int i;
-    double total = 0;
-    double highest, lowest, salary;
-    int highIndex = 0, lowIndex = 0;
-
     printf("\n===== EMPLOYEE REPORT =====\n");
-
-    if (count == 0) {
-        printf("No employees yet.\n");
-        return;
-    }
-
-    highest = calculateGross(employees[0]);
-    lowest = calculateGross(employees[0]);
-
-    for (i = 0; i < count; i++) {
-        salary = calculateGross(employees[i]);
-        total = total + salary;
-
-        if (salary > highest) {
-            highest = salary;
-            highIndex = i;
-        }
-        if (salary < lowest) {
-            lowest = salary;
-            lowIndex = i;
-        }
-    }
-
-    printf("Total Employees: %d\n", count);
-    printf("Average Salary: N$%.2f\n", total / count);
-    printf("Highest Salary: N$%.2f (%s)\n", highest, employees[highIndex].name);
-    printf("Lowest Salary: N$%.2f (%s)\n", lowest, employees[lowIndex].name);
+    printf("Employee data is unavailable.\n");
 }
 
-void budgetReport(const Budget budgets[], int count)
+void budgetReport(const struct Budget budgets[], int count)
 {
     int i;
     int exceeded = 0;
@@ -80,7 +97,7 @@ void budgetReport(const Budget budgets[], int count)
     }
 }
 
-void supplierReport(const Supplier suppliers[], int count)
+void supplierReport(const struct Supplier suppliers[], int count)
 {
     int i;
 
@@ -103,7 +120,7 @@ void supplierReport(const Supplier suppliers[], int count)
     printf("\nTotal Suppliers: %d\n", count);
 }
 
-void assetReport(const Asset assets[], int count)
+void assetReport(const struct Asset assets[], int count)
 {
     int i;
     double totalValue = 0;
@@ -119,21 +136,21 @@ void assetReport(const Asset assets[], int count)
         printf("\nAsset %d\n", i + 1);
         printf("ID: %s\n", assets[i].id);
         printf("Name: %s\n", assets[i].name);
-        printf("Type: %s\n", assets[i].type);
+        printf("Type: %d\n", assets[i].type);
         printf("Value: N$%.2f\n", assets[i].value);
         printf("Department: %s\n", assets[i].department);
         printf("Condition: %s\n", assets[i].condition);
-        totalValue = totalValue + assets[i].value;
+        totalValue += assets[i].value;
     }
 
     printf("\nTotal Assets: %d\n", count);
     printf("Total Value: N$%.2f\n", totalValue);
 }
 
-void displayReports(const Employee employees[], int employeeCount,
-                    const Budget budgets[], int budgetCount,
-                    const Supplier suppliers[], int supplierCount,
-                    const Asset assets[], int assetCount)
+void displayReports(const struct Employee employees[], int employeeCount,
+                    const struct Budget budgets[], int budgetCount,
+                    const struct Supplier suppliers[], int supplierCount,
+                    const struct Asset assets[], int assetCount)
 {
     int choice;
 
@@ -153,7 +170,7 @@ void displayReports(const Employee employees[], int employeeCount,
 
         switch (choice) {
             case 1:
-                employeeReport(employees, employeeCount);
+                employeeReport();
                 break;
             case 2:
                 budgetReport(budgets, budgetCount);
@@ -170,4 +187,8 @@ void displayReports(const Employee employees[], int employeeCount,
                 printf("Invalid choice, try again.\n");
         }
     } while (choice != 5);
+}
+
+void assetReport(void)
+{
 }

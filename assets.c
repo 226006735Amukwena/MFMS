@@ -1,5 +1,13 @@
 #include <stdio.h>
-#include "Assets.h"
+#include "asset.h"
+
+#ifndef NAME_LEN
+#define NAME_LEN 50
+#endif
+
+#ifndef DEPT_LEN
+#define DEPT_LEN 50
+#endif
 
 int assetID[MAX_ASSETS];
 char assetName[MAX_ASSETS][NAME_LEN];
@@ -65,7 +73,7 @@ void assetDisplay(void)
 
        for (i =0; i < count;i++)
        {
-        printf("%-8d %-20.20s %-15.15s %-11.2f %-20.20s %-15.15s\n";
+        printf("%-8d %-20.20s %-15.15s %-11.2f %-20.20s %-15.15s\n",
         assetID[i], 
         assetName[i], 
         assetType[i], 
@@ -90,7 +98,7 @@ void assetDisplay(void)
         printf("enter Asset ID");
         scanf("%d", &search);
 
-        for (i =0, i < count; i++)
+        for (i = 0; i < count; i++)
         {
             if(assetID[i] ==search)
             {
