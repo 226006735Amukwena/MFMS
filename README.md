@@ -46,11 +46,11 @@ The system is organised into separate modules for employee management, budget ma
 |---|---|---|---|
 | 1 | 226054179 | Jose Mutongolume | Employee Management |
 | 2 | 226065669 | Matias Joseph | Budget Management |
-| 3 | 226006735 | Eliaser Amukwena | Supplier Management |
+| 3 | 226006735 | Eliaser Amukwena | Supplier Management / README.md |
 | 4 | 223023205 | Mukanwa Mataa | Asset Management |
 | 5 | 226054179 | Jose Mutongolume| Report Management |
 | 6 | 226034917 | Esala Amunyela | Functions and Integration |
-| 7 | 226006735 | Eliaser Amukwena| README.md |
+| 7 | 223074098 | Christiaan Shidiwe| utilities management |
 
 ### Repository Structure
 The repository contains the C source and header files for the different system modules, including:
