@@ -4,233 +4,233 @@
 #include "utilities.h"
 #include "suppliers.h"
 
-#define FIRST_SUPPLIER_ID 1001          //the first supplier ID to be assigned//
+#define STARTING_ID 1001
 
-static int  supId[MAX_SUPPLIERS];
-static char supName[MAX_SUPPLIERS][NAME_LEN];
-static char supEmail[MAX_SUPPLIERS][EMAIL_LEN];
-static char supPhone[MAX_SUPPLIERS][PHONE_LEN];
-static char supTown[MAX_SUPPLIERS][TOWN_LEN];
-static int  supCount = 0;
-static int  nextSupplierId = FIRST_SUPPLIER_ID;
+static int providerIds[MAX_SUPPLIERS];
+static char providerNames[MAX_SUPPLIERS][NAME_LEN];
+static char providerEmails[MAX_SUPPLIERS][EMAIL_LEN];
+static char providerPhones[MAX_SUPPLIERS][PHONE_LEN];
+static char providerCities[MAX_SUPPLIERS][TOWN_LEN];
 
-//arrays to store supplier data, and counters for the number of suppliers and the next ID to assign//
-int findSupplierById(int id)
+static int totalProviders = 0;
+static int idGenerator = STARTING_ID;
+
+int findSupplierById(int id) 
 {
-    int i;
-
-    for (i = 0; i < supCount; i++) {
-        if (supId[i] == id) {
-            return i;
+    for (int index = 0; index < totalProviders; ++index) {
+        if (providerIds[index] == id) {
+            return index;
         }
     }
     return -1;
 }
-//returns the number of suppliers currently registered//
-int getSupplierCount(void)
-{
-    return supCount;
-}
-//returns the index of a supplier with the given name, or -1 if not found//
-static int findSupplierByName(const char name[])
-{
-    int i;
 
-    for (i = 0; i < supCount; i++) {
-        if (equalsIgnoreCase(supName[i], name)) {
-            return i;
+int getSupplierCount(void) 
+{
+    return totalProviders;
+}
+
+static int locateProviderByName(const char *targetName) 
+{
+    for (int index = 0; index < totalProviders; ++index) {
+        if (equalsIgnoreCase(providerNames[index], targetName)) {
+            return index;
         }
     }
     return -1;
 }
-//prints the header row for the supplier table//
-static void printSupplierHeader(FILE *out)
+
+static void drawTableHeader(FILE *stream) 
 {
-    fprintf(out, "%-6s %-28s %-32s %-14s %-12s\n",
+    fprintf(stream, "%-6s %-28s %-32s %-14s %-12s\n",
             "ID", "Supplier name", "Email", "Telephone", "Town");
-    printLine(out, '-', 96);
+    printLine(stream, '-', 96);
 }
-//prints a single row of supplier data for the supplier at index i//
-static void printSupplierRow(FILE *out, int i)
+
+// Internal helper rewritten
+static void outputProviderRecord(FILE *stream, int index) 
 {
-    fprintf(out, "%-6d %-28.28s %-32.32s %-14.14s %-12.12s\n",
-            supId[i], supName[i], supEmail[i], supPhone[i], supTown[i]);
+    fprintf(stream, "%-6d %-28.28s %-32.32s %-14.14s %-12.12s\n",
+            providerIds[index], providerNames[index], providerEmails[index], 
+            providerPhones[index], providerCities[index]);
 }
-//prints the entire supplier table to the given output stream//
-void printSupplierTable(FILE *out)
+
+void printSupplierTable(FILE *out) 
 {
-    int i;
-    //
-    if (supCount == 0) {
+    if (totalProviders == 0) {
         fprintf(out, "  (no suppliers registered)\n");
         return;
     }
-    printSupplierHeader(out);           
-    for (i = 0; i < supCount; i++) {        
-        printSupplierRow(out, i);
+    
+    drawTableHeader(out);           
+    for (int idx = 0; idx < totalProviders; ++idx) {        
+        outputProviderRecord(out, idx);
     }
 }
-//adds a new supplier by prompting the user for input and storing the data in the arrays//
-void addSupplier(void)
+
+void addSupplier(void) 
 {
-    char name[NAME_LEN];
-    char email[EMAIL_LEN];
-    char phone[PHONE_LEN];
-    int n;
-// displays the "ADD SUPPLIER" title and checks if the supplier table is full//
+    char inputName[NAME_LEN];
+    char inputEmail[EMAIL_LEN];
+    char inputPhone[PHONE_LEN];
+
     printTitle(stdout, "ADD SUPPLIER");
-    if (supCount >= MAX_SUPPLIERS) {
+    
+    if (totalProviders >= MAX_SUPPLIERS) {
         printf("The supplier table is full (%d suppliers).\n", MAX_SUPPLIERS);
         return;
     }
 
-   //prompts the user for supplier name, email, and phone number, validating each input//
-    for (;;) {
-        readText("Supplier name : ", name, NAME_LEN);
-        if (findSupplierByName(name) != -1) {
+    while (1) {
+        readText("Supplier name : ", inputName, NAME_LEN);
+        if (locateProviderByName(inputName) != -1) {
             printf("  A supplier with that name is already registered.\n");
         } else {
             break;
         }
     }
-    //
-    for (;;) {
-        readText("Email         : ", email, EMAIL_LEN);
-        if (isValidEmail(email)) {
+    
+    while (1) {
+        readText("Email         : ", inputEmail, EMAIL_LEN);
+        if (isValidEmail(inputEmail)) {
             break;
         }
         printf("  Invalid email. Example: sales@company.com.na\n");
     }
-   //prompts the user for a valid phone number, ensuring it meets the required format//
-    for (;;) {
-        readText("Telephone     : ", phone, PHONE_LEN);
-        if (isValidPhone(phone)) {
+   
+    while (1) {
+        readText("Telephone     : ", inputPhone, PHONE_LEN);
+        if (isValidPhone(inputPhone)) {
             break;
         }
         printf("  Invalid telephone. Use at least 7 digits, e.g. 061 234 5678 or +264 61 234 5678.\n");
     }
-    //stores the new supplier data in the arrays and increments the supplier count//
-    n = supCount;
-    supId[n] = nextSupplierId++;
-    strcpy(supName[n], name);          
-    strcpy(supEmail[n], email);
-    strcpy(supPhone[n], phone);
-    readText("Town/Location : ", supTown[n], TOWN_LEN);
-    supCount++;
-
-    printf("\nSupplier registered with ID %d.\n", supId[n]);
+    
+    int newIndex = totalProviders;
+    providerIds[newIndex] = idGenerator++;
+    
+    strcpy(providerNames[newIndex], inputName);          
+    strcpy(providerEmails[newIndex], inputEmail);
+    strcpy(providerPhones[newIndex], inputPhone);
+    readText("Town/Location : ", providerCities[newIndex], TOWN_LEN);
+    
+    totalProviders++;
+    printf("\nSupplier registered with ID %d.\n", providerIds[newIndex]);
 }
- //displays all registered suppliers in a formatted table, along with the total count//
-void displaySuppliers(void)
+
+void displaySuppliers(void) 
 {
     printTitle(stdout, "ALL SUPPLIERS");
     printSupplierTable(stdout);
-    printf("\nTotal suppliers: %d\n", supCount);
+    printf("\nTotal suppliers: %d\n", totalProviders);
 }
-//searches for suppliers based on user input, either by ID, name, or town, and displays the results//
-void searchSupplier(void)
+
+void searchSupplier(void) 
 {
-    int choice;
-    int id;
-    int index;
-    int i;
-    int matches = 0;
-    char text[NAME_LEN];
-    //displays the search menu and prompts the user to choose a search type//
+    int selection, targetId, recordIndex;
+    int foundCount = 0;
+    char searchString[NAME_LEN];
+    
     printTitle(stdout, "SEARCH SUPPLIER");
     printf("1. Search by supplier ID\n");
     printf("2. Search by name (part of a name is fine)\n");
     printf("3. Search by town\n");
-    choice = readInt("Choose search type: ", 1, 3);
-    //performs the search based on the user's choice and displays matching suppliers//
-    if (choice == 1) {
-        id = readInt("Enter supplier ID: ", 1, 999999);
-        index = findSupplierById(id);
-        if (index == -1) {
-            printf("  No supplier with ID %d was found.\n", id);
+    selection = readInt("Choose search type: ", 1, 3);
+    
+    if (selection == 1) {
+        targetId = readInt("Enter supplier ID: ", 1, 999999);
+        recordIndex = findSupplierById(targetId);
+        
+        if (recordIndex == -1) {
+            printf("  No supplier with ID %d was found.\n", targetId);
         } else {
-            printSupplierHeader(stdout);
-            printSupplierRow(stdout, index);
+            drawTableHeader(stdout);
+            outputProviderRecord(stdout, recordIndex);
         }
         return;
     }
-    if (choice == 2) {
-        readText("Enter name to search: ", text, NAME_LEN);
+    
+    if (selection == 2) {
+        readText("Enter name to search: ", searchString, NAME_LEN);
     } else {
-        readText("Enter town: ", text, TOWN_LEN);
+        readText("Enter town: ", searchString, TOWN_LEN);
     }
-    for (i = 0; i < supCount; i++) {
-        int hit;
-        if (choice == 2) {
-            hit = containsIgnoreCase(supName[i], text);
+    
+    for (int idx = 0; idx < totalProviders; ++idx) {
+        int isMatch = 0;
+        if (selection == 2) {
+            isMatch = containsIgnoreCase(providerNames[idx], searchString);
         } else {
-            hit = equalsIgnoreCase(supTown[i], text);
+            isMatch = equalsIgnoreCase(providerCities[idx], searchString);
         }
-        if (hit) {
-            if (matches == 0) {
-                printSupplierHeader(stdout);
+        
+        if (isMatch) {
+            if (foundCount == 0) {
+                drawTableHeader(stdout);
             }
-            printSupplierRow(stdout, i);
-            matches++;
+            outputProviderRecord(stdout, idx);
+            foundCount++;
         }
     }
-    printf("\n%d supplier(s) found.\n", matches);
+    printf("\n%d supplier(s) found.\n", foundCount);
 }
-//compares two suppliers based on their names and towns, providing information about their alphabetical order and location//
-void compareSuppliers(void)
+
+void compareSuppliers(void) 
 {
-    int idA;
-    int idB;
-    int a;
-    int b;
-    int order;
-    char lowerA[NAME_LEN];
-    char lowerB[NAME_LEN];
-// displays the "COMPARE TWO SUPPLIERS" title and checks if there are at least two suppliers to compare//
     printTitle(stdout, "COMPARE TWO SUPPLIERS");
-    if (supCount < 2) {
+    
+    if (totalProviders < 2) {
         printf("  You need at least two registered suppliers to compare.\n");
         return;
     }
-    idA = readInt("First supplier ID : ", 1, 999999);
-    idB = readInt("Second supplier ID: ", 1, 999999);
-    a = findSupplierById(idA);
-    b = findSupplierById(idB);
-    if (a == -1 || b == -1) {
+    
+    int firstId = readInt("First supplier ID : ", 1, 999999);
+    int secondId = readInt("Second supplier ID: ", 1, 999999);
+    
+    int index1 = findSupplierById(firstId);
+    int index2 = findSupplierById(secondId);
+    
+    if (index1 == -1 || index2 == -1) {
         printf("  One of the supplier IDs was not found.\n");
         return;
     }
-    if (a == b) {
+    if (index1 == index2) {
         printf("  Please choose two different suppliers.\n");
         return;
     }
 
-   //converts the supplier names to lowercase for case-insensitive comparison and determines their alphabetical order//
-    toLowerCopy(lowerA, supName[a], NAME_LEN);
-    toLowerCopy(lowerB, supName[b], NAME_LEN);
-    order = strcmp(lowerA, lowerB);
-    //displays the comparison results, including alphabetical order, town location, and name lengths//
-    printf("\n  A: %s (%s)\n  B: %s (%s)\n\n", supName[a], supTown[a], supName[b], supTown[b]);
-    if (order < 0) {
-        printf("  Alphabetically, \"%s\" comes before \"%s\".\n", supName[a], supName[b]);
-    } else if (order > 0) {
-        printf("  Alphabetically, \"%s\" comes before \"%s\".\n", supName[b], supName[a]);
+    char name1Lower[NAME_LEN], name2Lower[NAME_LEN];
+    toLowerCopy(name1Lower, providerNames[index1], NAME_LEN);
+    toLowerCopy(name2Lower, providerNames[index2], NAME_LEN);
+    
+    int comparison = strcmp(name1Lower, name2Lower);
+    
+    printf("\n  A: %s (%s)\n  B: %s (%s)\n\n", 
+           providerNames[index1], providerCities[index1], 
+           providerNames[index2], providerCities[index2]);
+           
+    if (comparison < 0) {
+        printf("  Alphabetically, \"%s\" comes before \"%s\".\n", providerNames[index1], providerNames[index2]);
+    } else if (comparison > 0) {
+        printf("  Alphabetically, \"%s\" comes before \"%s\".\n", providerNames[index2], providerNames[index1]);
     } else {
         printf("  The two names are identical.\n");
     }
-    if (equalsIgnoreCase(supTown[a], supTown[b])) {
-        printf("  Both suppliers are located in %s.\n", supTown[a]);
+    
+    if (equalsIgnoreCase(providerCities[index1], providerCities[index2])) {
+        printf("  Both suppliers are located in %s.\n", providerCities[index1]);
     } else {
-        printf("  They are in different towns (%s and %s).\n", supTown[a], supTown[b]);
+        printf("  They are in different towns (%s and %s).\n", providerCities[index1], providerCities[index2]);
     }
+    
     printf("  Name lengths: %d and %d characters.\n",
-           (int)strlen(supName[a]), (int)strlen(supName[b]));
+           (int)strlen(providerNames[index1]), (int)strlen(providerNames[index2]));
 }
-//displays the supplier management menu and handles user input for various supplier-related operations//
-void supplierMenu(void)
+
+void supplierMenu(void) 
 {
-    int choice;
-    //displays the supplier management menu and handles user input for various supplier-related operations//
+    int userChoice;
+    
     do {
         printf("\n");
         printTitle(stdout, "SUPPLIER MANAGEMENT");
@@ -239,89 +239,100 @@ void supplierMenu(void)
         printf("3. Search for a supplier\n");
         printf("4. Compare two suppliers\n");
         printf("5. Back to main menu\n");
-        choice = readInt("Enter your choice: ", 1, 5);
-        //performs the selected operation based on the user's choice//
-        switch (choice) {
-            case 1: addSupplier();       
+        
+        userChoice = readInt("Enter your choice: ", 1, 5);
+        
+        switch (userChoice) {
+            case 1: 
+                addSupplier();       
                 break;
-            case 2: displaySuppliers();  
+            case 2: 
+                displaySuppliers();  
                 break;
-            case 3: searchSupplier();    
+            case 3: 
+                searchSupplier();    
                 break;
-            case 4: compareSuppliers();  
+            case 4: 
+                compareSuppliers();  
                 break;
-            default: break;
+            default: 
+                break;
         }
-        if (choice != 5) {
+        
+        if (userChoice != 5) {
             pauseScreen();
         }
-    } while (choice != 5);
+    } while (userChoice != 5);
 }
 
-//saves the supplier data to a file specified by the given path, returning the number of suppliers saved or -1 on error//
-int saveSuppliers(const char *path)
+int saveSuppliers(const char *path) 
 {
-    FILE *fp = fopen(path, "w");
-    int i;
-    //opens the specified file for writing and checks for errors//
-    if (fp == NULL) {
+    FILE *filePointer = fopen(path, "w");
+    
+    if (filePointer == NULL) {
         perror(path);
         return -1;
     }
-    for (i = 0; i < supCount; i++) {
-        fprintf(fp, "%d|%s|%s|%s|%s\n", supId[i], supName[i], supEmail[i],
-                supPhone[i], supTown[i]);
+    
+    for (int idx = 0; idx < totalProviders; ++idx) {
+        fprintf(filePointer, "%d|%s|%s|%s|%s\n", 
+                providerIds[idx], providerNames[idx], providerEmails[idx],
+                providerPhones[idx], providerCities[idx]);
     }
-    fclose(fp);
-    return supCount;
+    
+    fclose(filePointer);
+    return totalProviders;
 }
-//loads supplier data from a file specified by the given path, returning the number of suppliers loaded or -1 on error//
-int loadSuppliers(const char *path)
+
+int loadSuppliers(const char *path) 
 {
-    FILE *fp = fopen(path, "r");
-    char line[256];
-    char name[NAME_LEN];
-    char email[EMAIL_LEN];
-    char phone[PHONE_LEN];
-    char town[TOWN_LEN];
-    int id;
-    int skipped = 0;
-    size_t len;
-    //opens the specified file for reading and checks for errors//
-    if (fp == NULL) {
+    FILE *filePointer = fopen(path, "r");
+    if (filePointer == NULL) {
         return -1;
     }
-    supCount = 0;
-    nextSupplierId = FIRST_SUPPLIER_ID;
-    while (fgets(line, sizeof(line), fp) != NULL) {
-        len = strlen(line);
-        while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
-            line[--len] = '\0';
+    
+    char buffer[256];
+    char tempName[NAME_LEN], tempEmail[EMAIL_LEN], tempPhone[PHONE_LEN], tempCity[TOWN_LEN];
+    int tempId;
+    int skippedRecords = 0;
+    
+    totalProviders = 0;
+    idGenerator = STARTING_ID;
+    
+    while (fgets(buffer, sizeof(buffer), filePointer) != NULL) {
+        size_t length = strlen(buffer);
+        
+        while (length > 0 && (buffer[length - 1] == '\n' || buffer[length - 1] == '\r')) {
+            buffer[--length] = '\0';
         }
-        if (len == 0) {
-            continue;
-        }
-        //parses the line from the file and extracts supplier data, validating the input and storing it in the arrays//
-        if (sscanf(line, "%d|%49[^|]|%59[^|]|%19[^|]|%29[^|]",
-                   &id, name, email, phone, town) == 5
-            && id > 0 && findSupplierById(id) == -1 && supCount < MAX_SUPPLIERS) {
-            supId[supCount] = id;
-            strcpy(supName[supCount], name);
-            strcpy(supEmail[supCount], email);
-            strcpy(supPhone[supCount], phone);
-            strcpy(supTown[supCount], town);
-            supCount++;
-            if (id >= nextSupplierId) {
-                nextSupplierId = id + 1;    
+        
+        if (length == 0) continue;
+        
+        int parsedFields = sscanf(buffer, "%d|%49[^|]|%59[^|]|%19[^|]|%29[^|]",
+                                  &tempId, tempName, tempEmail, tempPhone, tempCity);
+                                  
+        if (parsedFields == 5 && tempId > 0 && findSupplierById(tempId) == -1 && totalProviders < MAX_SUPPLIERS) {
+            providerIds[totalProviders] = tempId;
+            strcpy(providerNames[totalProviders], tempName);
+            strcpy(providerEmails[totalProviders], tempEmail);
+            strcpy(providerPhones[totalProviders], tempPhone);
+            strcpy(providerCities[totalProviders], tempCity);
+            
+            totalProviders++;
+            
+            if (tempId >= idGenerator) {
+                idGenerator = tempId + 1;    
             }
         } else {
-            skipped++;
+            skippedRecords++;
         }
     }
-    //closes the file and displays a warning if any invalid records were skipped during loading//
-    fclose(fp);
-    if (skipped > 0) {
-        printf("  Warning: skipped %d invalid record(s) in %s\n", skipped, path);
+    
+    fclose(filePointer);
+    
+    if (skippedRecords > 0) {
+        printf("  Warning: skipped %d invalid record(s) in %s\n", skippedRecords, path);
     }
-    return supCount;
+    
+    return totalProviders;
 }
