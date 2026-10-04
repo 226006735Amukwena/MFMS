@@ -1,21 +1,77 @@
-# MFMS
-ProjectA
-Members and Responsibilities
-#1- 226054179  |Jose Mutongolume
-Role: Emplaoyee Management system
+# MUNICIPAL FINANCIAL MANAGEMENT SYSTEM (MFMS)
 
-#2- 226065669 |Matias Joseph
-Role: Budget Management system
+## PAP521S – Programming in Practice
+**Project A: Municipal Financial Management System**
 
-#3- 226006735 |Eliaser Amukwena
-Role: Suppliers Management system
+### Project Description
+The Municipal Financial Management System (MFMS) is a menu-driven C application designed to demonstrate fundamental programming concepts through a realistic municipal finance scenario.
 
-#4- 223023205 |Mukanwa Mataa
-Role: Asset Management system
+The system is organised into separate modules for employee management, budget management, supplier management, asset management and reporting.
 
-#5-
-Role: Management
-#6- 226034917 |Esala Amunyela
-Role: Functions , IntegrationS
-#7-
-Role: Management
+### Main Features
+1. Employee Management
+   - Add employees
+   - Display employees
+   - Search employees
+   - Calculate salary information
+
+2. Budget Management
+   - Add departmental budgets
+   - Record expenditure
+   - Calculate remaining budget
+   - Identify departments that exceed their budgets
+   - Search and display budget information
+
+3. Supplier Management
+   - Add suppliers
+   - Display suppliers
+   - Search suppliers
+   - Compare suppliers
+   - Validate supplier contact information
+
+4. Asset Management
+   - Maintain a municipal asset register
+   - Store asset information
+   - Display and search assets
+
+5. Reports
+   - Employee information
+   - Budget information
+   - Supplier information
+   - Asset information
+
+### Project Members and Responsibilities
+
+| No. | Student Number | Student | Responsibility |
+|---|---|---|---|
+| 1 | 226054179 | Jose Mutongolume | Employee Management |
+| 2 | 226041352 | Esther Haihambo | Budget Management |
+| 3 | 226006735 | Eliaser Amukwena | Supplier Management / README.md |
+| 4 | 223023205 | Mukanwa Mataa | Asset Management |
+| 5 | 226065669 | Matias Joseph| Report Management |
+| 6 | 226034917 | Esala Amunyela | Functions and Integration |
+| 7 | 223074098 | Christiaan Shidiwe| utilities management |
+
+### Repository Structure
+The repository contains the C source and header files for the different system modules, including:
+
+- `main.c`
+- `employees.c`
+- `employees.h`
+- `budget.c`
+- `budget.h`
+- `suppliers.c`
+- `suppliers.h`
+- `assets.c`
+- `asset.h`
+- `reports.c`
+- `reports.h`
+- `utils.c`
+- `utils.h`
+- `README.md`
+
+### Compilation
+We had a few complications at the compilation of the demo test
+
+### GitHub Repository
+https://github.com/226006735Amukwena/MFMS
